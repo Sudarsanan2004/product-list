@@ -1,12 +1,22 @@
 :root {
-    --primary-color: #2563eb;
-    --background-color: #f8fafc;
-    --card-background: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    --hover-color: #f1f5f9;
-    --header-bg: #f8fafc;
+    --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    --secondary-gradient: linear-gradient(135deg, #3b82f6 0%, #2dd4bf 100%);
+    --background-color: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --border-color: rgba(255, 255, 255, 0.3);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+
+    /* Badge Colors */
+    --badge-dp-bg: #dcfce7;
+    --badge-dp-text: #166534;
+    --badge-mrp-bg: #f3f4f6;
+    --badge-mrp-text: #6b7280;
+    --badge-profit-bg: #dcfce7;
+    /* Green for profit */
+    --badge-profit-text: #166534;
+    /* Green for profit */
 }
 
 * {
@@ -16,73 +26,83 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Lato', sans-serif;
     background-color: var(--background-color);
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 0.05) 0px, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.05) 0px, transparent 50%);
     color: var(--text-primary);
     line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 3rem 1.5rem;
 }
 
 header {
-    margin-bottom: 2rem;
     text-align: center;
+    margin-bottom: 3rem;
 }
 
 h1 {
-    font-size: 1.875rem;
-    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
     color: var(--text-primary);
-    margin-bottom: 1.5rem;
     letter-spacing: -0.025em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 3. Glassmorphism Effect */
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--glass-shadow);
 }
 
 .search-container {
-    position: relative;
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
+    position: relative;
+    border-radius: 16px;
+    z-index: 10;
 }
 
 #searchInput {
     width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
-    font-size: 1rem;
+    padding: 1.25rem 1.25rem 1.25rem 3.5rem;
+    font-size: 1.1rem;
     color: var(--text-primary);
-    background-color: var(--card-background);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Lato', sans-serif;
 }
 
 #searchInput:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
 }
 
 .search-icon {
     position: absolute;
-    left: 1rem;
+    left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-secondary);
     pointer-events: none;
-    width: 20px;
-    height: 20px;
 }
 
 .table-container {
-    background-color: var(--card-background);
-    border-radius: 16px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    border-radius: 20px;
     overflow: hidden;
-    border: 1px solid var(--border-color);
 }
 
 table {
@@ -92,67 +112,130 @@ table {
 }
 
 thead {
-    background-color: var(--header-bg);
+    background-color: rgba(255, 255, 255, 0.5);
     border-bottom: 1px solid var(--border-color);
 }
 
 th {
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    font-size: 0.875rem;
+    padding: 1.25rem 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-th.col-id { width: 10%; text-align: center; }
-th.col-name { width: 50%; }
-th.col-price { width: 20%; text-align: right; }
+th.col-id {
+    width: 8%;
+    text-align: center;
+}
+
+th.col-name {
+    width: 42%;
+}
+
+th.col-price {
+    width: 15%;
+    text-align: right;
+}
+
+th.col-profit {
+    width: 20%;
+    text-align: right;
+}
 
 td {
     padding: 1rem 1.5rem;
-    font-size: 0.95rem;
-    border-bottom: 1px solid var(--border-color);
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     color: var(--text-primary);
+    vertical-align: middle;
 }
 
-td.col-id { text-align: center; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
-td.col-name { font-weight: 500; }
-td.col-price { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-
-tbody tr:last-child td {
-    border-bottom: none;
+/* 6. Micro-Interactions */
+tbody tr {
+    transition: all 0.2s ease;
 }
 
 tbody tr:hover {
-    background-color: var(--hover-color);
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.005);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+    position: relative;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+td.col-id {
+    text-align: center;
+    color: var(--text-secondary);
+    font-weight: 700;
+    opacity: 0.7;
 }
 
-tbody tr {
-    animation: fadeIn 0.3s ease-out forwards;
+td.col-name {
+    font-weight: 600;
+}
+
+td.col-price,
+td.col-profit {
+    text-align: right;
+}
+
+/* 4. Price Badges */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.badge-profit {
+    background-color: var(--badge-profit-bg);
+    color: var(--badge-profit-text);
+    border: 1px solid rgba(22, 101, 52, 0.1);
+}
+
+.highlight {
+    background-color: #fefce8;
+    color: #a16207;
+    font-weight: 800;
+    padding: 0 2px;
+    border-radius: 2px;
+    border-bottom: 2px solid #ca8a04;
 }
 
 .no-results {
-    padding: 3rem;
+    padding: 4rem;
     text-align: center;
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.hidden {
-    display: none;
-}
-
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 640px) {
-    .container { padding: 1rem; }
-    th, td { padding: 0.75rem 0.5rem; }
-    th.col-id, td.col-id { display: none; } /* Hide ID on very small screens if needed, or reduce padding */
-    h1 { font-size: 1.5rem; }
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .container {
+        padding: 1.5rem 1rem;
+    }
+
+    th,
+    td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    th.col-id,
+    td.col-id {
+        display: none;
+    }
+
+    .badge {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.8rem;
+    }
 }

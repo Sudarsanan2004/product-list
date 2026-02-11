@@ -1,29 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('productTableBody');
     const searchInput = document.getElementById('searchInput');
-    const noResults = document.getElementById('noResults');
 
-    // Function to render the table rows
-    function renderTable(data) {
-        tableBody.innerHTML = '';
-
-        if (data.length === 0) {
-            noResults.classList.remove('hidden');
-            return;
-        } else {
-            noResults.classList.add('hidden');
-        }
-
-        data.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="col-id">${product.id}</td>
-                <td class="col-name">${product.name}</td>
-                <td class="col-price">${formatCurrency(product.dp)}</td>
-                <td class="col-price">${formatCurrency(product.mrp)}</td>
-            `;
-            tableBody.appendChild(row);
-        });
+    // Function to highlight text
+    function highlightText(text, term) {
+        if (!term) return text;
+        // Escape special regex characters in the search term
+        const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedTerm})`, 'gi');
+        return text.toString().replace(regex, '<span class="highlight">$1</span>');
     }
 
     // Helper to format currency (assuming INR based on data context)
@@ -35,11 +20,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }).format(amount);
     }
 
+    // Function to render the table rows
+    function renderTable(data, searchTerm = '') {
+        tableBody.innerHTML = '';
+
+        data.forEach(product => {
+            const row = document.createElement('tr');
+
+            // Calculate Profit
+            const profit = product.mrp - product.dp;
+
+            // Highlight name and ID if they match
+            const highlightedName = highlightText(product.name, searchTerm);
+            const highlightedId = highlightText(product.id, searchTerm);
+
+            row.innerHTML = `
+                <td class="col-id">${highlightedId}</td>
+                <td class="col-name">${highlightedName}</td>
+                <td class="col-price">${formatCurrency(product.dp)}</td>
+                <td class="col-price">${formatCurrency(product.mrp)}</td>
+                <td class="col-profit"><span class="badge badge-profit">+${formatCurrency(profit)}</span></td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
     // Initial render
     renderTable(products);
 
-    // Search functionality
-    searchInput.addEventListener('input', (e) => {
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
+
+    // Search functionality with Debounce
+    const handleSearch = debounce((e) => {
         const searchTerm = e.target.value.toLowerCase().trim();
 
         const filteredProducts = products.filter(product => {
@@ -48,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return idMatch || nameMatch;
         });
 
-        renderTable(filteredProducts);
-    });
+        renderTable(filteredProducts, searchTerm);
+    }, 300); // 300ms delay
+
+    searchInput.addEventListener('input', handleSearch);
 });
